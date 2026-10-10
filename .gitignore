@@ -1,0 +1,23 @@
+.env
+node_modules/
+/node_modules/
+
+# Build & Output Folders
+/dist/
+/build/
+/out/
+/.next/
+/.vite/
+
+# Logs & Debugging
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+#  /node_module 
+#The leading slash / in /node_modules anchors the rule strictly to the root directory where the .gitignore file sits.
+
+#node_module/
+# Adding a trailing slash (/) at the end of a line in .gitignore tells Git to only match directories (folders), not files.
