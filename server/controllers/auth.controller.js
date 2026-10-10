@@ -30,6 +30,8 @@ export const googleAuth=async (req,res)=>{
     }
 }
 
+
+
 export const logOut=async (req,res)=>{
     try {
         return res.clearCookie("token",{
