@@ -29,7 +29,11 @@ app.get('/', (req, res) => {
 
 // Start Server
 app.listen(PORT, () => {
+<<<<<<< HEAD
  console.log("Server running on port ${PORT}");
+=======
+  console.log(`Server running on port ${PORT}`);
+>>>>>>> 774ba7c18e3383bdf4bc2c393e2651a8b5ed2773
   connectToDB();
 
 });
