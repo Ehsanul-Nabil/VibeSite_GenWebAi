@@ -1,74 +1,113 @@
+
 import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { Rocket, Code2, Monitor } from 'lucide-react'
 import { serverUrl } from '../App'
 
 function Editor() {
-  const { id } = useParams()
-  const [website, setWebsite] = useState(null)
-  const iframeRef = useRef(null)
+    const { id } = useParams()
+    const [website, setWebsite] = useState(null)
+    const [error, setError] = useState("")
+    const iframeRef = useRef(null)
 
-  // 1. Fetch website data on load
-  useEffect(() => {
-    axios
-      .get(`${serverUrl}/api/website/get-by-id/${id}`, { withCredentials: true })
-      .then((res) => setWebsite(res.data))
-      .catch((err) => console.log(err))
-  }, [id])
+    useEffect(() => {
+        const handleGetWebsite = async () => {
+            try {
+                const result = await axios.get(`${serverUrl}/api/website/get-by-id/${id}`, { withCredentials: true })
+                setWebsite(result.data)
+            } catch (error) {
+                console.log(error)
+                setError(error.response?.data?.message || "Something went wrong")
+            }
+        }
+        handleGetWebsite()
+    }, [id])
 
-  // 2. Render HTML inside iframe whenever latestCode updates
-  useEffect(() => {
-    if (!iframeRef.current || !website?.latestCode) return
+    useEffect(() => {
+        if (!iframeRef.current || !website?.latestCode) return;
 
-    const blob = new Blob([website.latestCode], { type: 'text/html' })
-    const url = URL.createObjectURL(blob)
-    iframeRef.current.src = url
+        const blob = new Blob([website.latestCode], { type: "text/html" })
+        const url = URL.createObjectURL(blob)
+        iframeRef.current.src = url
 
-    return () => URL.revokeObjectURL(url)
-  }, [website?.latestCode])
+        return () => URL.revokeObjectURL(url)
+    }, [website?.latestCode])
 
-  if (!website) {
-    return <div className="h-screen bg-black text-white flex items-center justify-center">Loading...</div>
-  }
-
-  return (
-    <div className="flex h-screen w-screen bg-black text-white">
-      {/* Left Sidebar (Chat & Title) */}
-      <aside className="w-80 border-r border-white/10 flex flex-col">
-        <div className="p-4 border-b border-white/10 font-bold">
-          {website.title}
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
-          {website.conversation?.map((msg, index) => (
-            <div
-              key={index}
-              className={`p-3 rounded-lg text-sm max-w-[80%] ${
-                msg.role === 'user'
-                  ? 'bg-white text-black ml-auto'
-                  : 'bg-white/10 text-white mr-auto'
-              }`}
-            >
-              {msg.content}
+    function Header() {
+        return (
+            <div className='h-14 px-4 flex items-center justify-between border-b border-white/10'>
+                <span>{website?.title}</span>
             </div>
-          ))}
-        </div>
-      </aside>
+        )
+    }
 
-      {/* Main Area (Live Preview) */}
-      <main className="flex-1 flex flex-col">
-        <div className="p-4 border-b border-white/10 text-xs text-zinc-400">
-          Live Preview
-        </div>
+    function Chat() {
+        return (
+            <div className='flex-1 overflow-y-auto px-4 py-4 space-y-4'>
+                {website?.conversation.map((m, i) => (
+                    <div
+                        key={i}
+                        className={`max-w-[85%] ${
+                            m.role === "user" ? "ml-auto" : "mr-auto"
+                        }`}
+                    >
+                        <div
+                            className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                                m.role === "user"
+                                    ? "bg-white text-black"
+                                    : "bg-white/5 border border-white/10 text-zinc-200"
+                            }`}
+                        >
+                            {m.content}
+                        </div>
+                    </div>
+                ))}
 
-        <iframe
-          ref={iframeRef}
-          title="Preview"
-          className="flex-1 w-full bg-white"
-        />
-      </main>
-    </div>
-  )
+
+            </div>
+        )
+    }
+
+    if (error) {
+        return (
+            <div className='h-screen flex items-center justify-center bg-black text-red-400'>
+                {error}
+            </div>
+        )
+    }
+
+    if (!website) {
+        return (
+            <div className='h-screen flex items-center justify-center bg-black text-white'>
+                Loading...
+            </div>
+        )
+    }
+
+    return (
+        <div className='h-screen w-screen flex bg-black text-white overflow-hidden'>
+            <aside>
+                <Header />
+                <Chat />
+            </aside>
+
+            <div className='flex-1 flex flex-col'>
+                <div className='h-14 px-4 flex justify-between items-center border-b border-white/10 bg-black/80'>
+                    <span className='text-xs text-zinc-400'>Live Preview</span>
+                    <div className='flex gap-2'>
+                        <button className='flex items-center gap-2 px-4 py-1.5 rounded-lg bg-linear-to-r from-indigo-500 to-purple-500 text-sm font-semibold hover:scale-105 transition'>
+                            <Rocket size={14} /> Deploy
+                        </button>
+                        <button className='p-2'><Code2 size={18} /></button>
+                        <button className='p-2'><Monitor size={18} /></button>
+                    </div>
+                </div>
+
+                <iframe ref={iframeRef} className='flex-1 w-full bg-white' />
+            </div>
+        </div>
+    )
 }
 
 export default Editor
