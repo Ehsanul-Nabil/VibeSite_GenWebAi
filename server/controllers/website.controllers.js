@@ -10,19 +10,19 @@ export const generateWebsite=async (req,res) => {
     console.log("0")
     try {
         const {prompt}=req.body
-            console.log("1")
+            console.log("1 - Request Payload Checked");
 
         if(!prompt){
             return res.status(400).json({message:"prompt is required"})
         }
-        console.log("2")
+    console.log("2 - Valid Prompt Received");
 
         // const user=req.user
         const user=await User.findById(req.user._id)
         if(!user){
             return res.status(400).json({message:"user not found"})
         }
-        console.log("3")
+        console.log("3 - User Found");
 
         // console.log("user: ", user)
         if(user.credits<50){
@@ -30,7 +30,7 @@ export const generateWebsite=async (req,res) => {
             {message:"you have not enough credits to generate a website"}
         )
         }
-        console.log("4")
+        console.log("4 - Credits Validated");
 
 
 
@@ -46,17 +46,17 @@ export const generateWebsite=async (req,res) => {
                 raw=await generateResponse(finalPrompt + "\n\nRETURN ONLY RAW JSON.")
                 parsed=await extractJson(raw)
             }
-            console.log("5")
+            console.log(`5 - Retry Attempt ${i + 1}`);
             console.log("raw: ",raw)
             console.log("parsed: ",parsed)
         }
-        console.log("6")
+        console.log("6 - AI Response Received");
 
         if(!parsed.code){
             console.log("ai returned invalid response",raw)
             return res.status(400).json({message:"ai returned invalid response"})
         }
-        console.log("7")
+        console.log("7 - Code Output Validated");
 
         // const website=await Website.create({
         //     user:user._id,
@@ -101,7 +101,7 @@ export const generateWebsite=async (req,res) => {
             });
         }
 
-        console.log("8")
+        console.log("8 - Website Document Created");
 
         user.credits=user.credits-50;
         await user.save()

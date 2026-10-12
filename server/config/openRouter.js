@@ -1,6 +1,11 @@
 const openRouterUrl = "https://openrouter.ai/api/v1/chat/completions"
 // const openRouterApiKey=process.env.OPENROUTER_API_KEY
-const model="deepseek/deepseek-chat"
+// const model="deepseek/deepseek-chat"
+
+// Recommended free & powerful models:
+// 1. "google/gemini-2.0-flash-exp:free" (Fast, highly accurate JSON output)
+// 2. "meta-llama/llama-3.3-70b-instruct:free" (Strong 70B parameter reasoning)
+const model = "google/gemini-2.0-flash-exp:free"
 
 export const generateResponse=async (prompt) => {
   const res = await fetch(openRouterUrl, {
