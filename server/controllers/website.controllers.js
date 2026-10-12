@@ -38,18 +38,40 @@ export const generateWebsite=async (req,res) => {
         let raw="";
         // raw = await generateResponse(finalPrompt)
         let parsed=null
-        for (let i = 0; i < 2 && !parsed; i++) {
-            raw=await generateResponse(finalPrompt)
-            parsed=await extractJson(raw)
 
-            if(!parsed){
-                raw=await generateResponse(finalPrompt + "\n\nRETURN ONLY RAW JSON.")
-                parsed=await extractJson(raw)
+
+        // for (let i = 0; i < 2 && !parsed; i++) {
+        //     raw=await generateResponse(finalPrompt)
+        //     parsed=await extractJson(raw)
+
+        //     if(!parsed){
+        //         raw=await generateResponse(finalPrompt + "\n\nRETURN ONLY RAW JSON.")
+        //         parsed=await extractJson(raw)
+        //     }
+        //     console.log(`5 - Retry Attempt ${i + 1}`);
+        //     // console.log("raw: ",raw)
+        //     // console.log("parsed: ",parsed)
+        // }
+
+        for (let i = 0; i < 2 && !parsed; i++) {
+            try {
+                raw = await generateResponse(finalPrompt);
+                parsed = await extractJson(raw);
+
+                if (!parsed) {
+                raw = await generateResponse(finalPrompt + "\n\nRETURN ONLY RAW JSON.");
+                parsed = await extractJson(raw);
+                }
+            } catch (error) {
+                console.error(`AI Generation Attempt ${i + 1} Error:`, error);
             }
+
             console.log(`5 - Retry Attempt ${i + 1}`);
-            console.log("raw: ",raw)
-            console.log("parsed: ",parsed)
-        }
+            // console.log("raw: ",raw)
+            // console.log("parsed: ",parsed)
+            }
+
+
         console.log("6 - AI Response Received");
 
         if(!parsed.code){
