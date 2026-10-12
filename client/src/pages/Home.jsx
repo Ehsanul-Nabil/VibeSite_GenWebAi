@@ -6,6 +6,7 @@ import { Coins } from 'lucide-react'
 import { serverUrl } from '../App'
 import { setUserData } from '../redux/userSlice'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 function Home() {
   const highlights = [
@@ -42,6 +43,7 @@ function Home() {
   const [openProfile, setOpenProfile] = useState(false)
   const { userData } = useSelector(state => state.user)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleLogOut = async () => {
     try {
@@ -55,11 +57,11 @@ function Home() {
 
   return (
     <div className='relative min-h-screen bg-[#06070B] text-slate-100 font-sans selection:bg-indigo-500 selection:text-white overflow-hidden'>
-      {/* Background Ambient Glows */}
+      {/* Dynamic Background Ambient Glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-tr from-indigo-600/20 via-purple-600/20 to-pink-500/10 blur-[130px] rounded-full pointer-events-none -z-0" />
       <div className="absolute top-[40%] -right-40 w-[500px] h-[500px] bg-indigo-500/10 blur-[150px] rounded-full pointer-events-none -z-0" />
 
-      {/* Floating Pill Glass Navbar */}
+      {/* Floating Pill Floating Glass Navbar */}
       <motion.nav
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -68,7 +70,7 @@ function Home() {
       >
         <div className='w-full max-w-5xl rounded-2xl bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/50 px-6 py-3 flex justify-between items-center transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05]'>
           
-          {/* Brand / Logo */}
+          {/* Logo Brand */}
           <div className='flex items-center gap-3 cursor-pointer group'>
             <div className='relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-[1.5px] shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform'>
               <div className='w-full h-full bg-[#06070B] rounded-[10px] flex items-center justify-center font-black text-transparent bg-clip-text bg-gradient-to-tr from-indigo-400 via-purple-300 to-pink-400 text-lg'>
@@ -85,7 +87,7 @@ function Home() {
             </div>
           </div>
 
-          {/* Navigation Items */}
+          {/* Navigation Links */}
           <div className='hidden md:flex items-center gap-8 bg-white/[0.04] px-5 py-2 rounded-full border border-white/5'>
             <span className='text-xs font-medium text-slate-300 hover:text-white transition-colors cursor-pointer'>
               Features
@@ -95,7 +97,7 @@ function Home() {
             </span>
           </div>
 
-          {/* User Controls & Actions */}
+          {/* Controls & User Actions */}
           <div className='flex items-center gap-4'>
             {userData && (
               <div className='hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium cursor-pointer hover:bg-white/10 transition shadow-inner'>
@@ -150,7 +152,10 @@ function Home() {
                         <span className='font-bold text-indigo-400 ml-auto'>+</span>
                       </button>
 
-                      <button className='w-full px-4 py-3 text-left text-xs font-medium text-slate-300 hover:bg-white/5 transition-colors'>
+                      <button 
+                        onClick={() => navigate("/dashboard")}
+                        className='w-full px-4 py-3 text-left text-xs font-medium text-slate-300 hover:bg-white/5 transition-colors'
+                      >
                         Dashboard
                       </button>
                       <button 
@@ -171,7 +176,7 @@ function Home() {
 
       {/* Hero Section */}
       <section className='relative pt-52 pb-28 px-6 text-center max-w-5xl mx-auto z-10'>
-        {/* Animated Pill Badge */}
+        {/* Animated Badge */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -179,7 +184,7 @@ function Home() {
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium tracking-wide uppercase mb-8 shadow-inner"
         >
           <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
-          Next-Gen AI Web Engine
+          Next-Gen AI Web Builder
         </motion.div>
 
         {/* Hero Title */}
@@ -205,7 +210,7 @@ function Home() {
           Turn your ideas into beautiful, interactive, production-ready web interfaces powered by modern AI. No design background required.
         </motion.p>
 
-        {/* Hero CTA Button */}
+        {/* Dynamic Hero CTA Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -213,15 +218,15 @@ function Home() {
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <button 
-            onClick={() => setOpenLogin(true)}
+            onClick={() => userData ? navigate("/dashboard") : setOpenLogin(true)}
             className="group relative px-8 py-4 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-semibold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            Create Your First Site
+            {userData ? "Go to Dashboard" : "Get Started"}
           </button>
         </motion.div>
       </section>
 
-      {/* Highlights / Features Grid */}
+      {/* Features Grid Section */}
       <section className='relative max-w-7xl mx-auto px-6 pb-32 z-10'>
         <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
           {highlights.map((item, i) => (
