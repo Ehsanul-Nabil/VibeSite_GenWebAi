@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
 export const googleAuth=async (req,res)=>{
-    // console.log("test")
+    console.log("googleAuth Login Func")
     try {
         const {name,email,avatar}=req.body
         if(!email){
@@ -30,16 +30,32 @@ export const googleAuth=async (req,res)=>{
     }
 }
 
-
-
 export const logOut=async (req,res)=>{
     try {
-        return res.clearCookie("token",{
+        res.clearCookie("token",{
             httpOnly:true,
             secure:false,
             sameSite:"strict"
         })
+        return res.status(200).json({message:"logout successfully"})
     } catch (error) {
         return res.status(500).json({message:`log out error ${error}`})
     }
 }
+
+
+
+// export const logOut = async (req, res) => {
+//     try {
+//         return res
+//             .clearCookie("token", {
+//                 httpOnly: true,
+//                 secure: false, // Set to true in production with HTTPS
+//                 sameSite: "strict"
+//             })
+//             .status(200)
+//             .json({ message: "Logged out successfully" });
+//     } catch (error) {
+//         return res.status(500).json({ message: `log out error ${error}` });
+//     }
+// }
