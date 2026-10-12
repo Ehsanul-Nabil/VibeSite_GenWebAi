@@ -57,11 +57,11 @@ function Home() {
 
   return (
     <div className='relative min-h-screen bg-[#06070B] text-slate-100 font-sans selection:bg-indigo-500 selection:text-white overflow-hidden'>
-      {/* Dynamic Background Ambient Glows */}
+      {/* Background Ambient Glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-tr from-indigo-600/20 via-purple-600/20 to-pink-500/10 blur-[130px] rounded-full pointer-events-none -z-0" />
       <div className="absolute top-[40%] -right-40 w-[500px] h-[500px] bg-indigo-500/10 blur-[150px] rounded-full pointer-events-none -z-0" />
 
-      {/* Floating Pill Floating Glass Navbar */}
+      {/* Floating Pill Glass Navbar */}
       <motion.nav
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -70,8 +70,8 @@ function Home() {
       >
         <div className='w-full max-w-5xl rounded-2xl bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/50 px-6 py-3 flex justify-between items-center transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05]'>
           
-          {/* Logo Brand */}
-          <div className='flex items-center gap-3 cursor-pointer group'>
+          {/* Logo / Branding */}
+          <div className='flex items-center gap-3 cursor-pointer group' onClick={() => navigate("/")}>
             <div className='relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-[1.5px] shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform'>
               <div className='w-full h-full bg-[#06070B] rounded-[10px] flex items-center justify-center font-black text-transparent bg-clip-text bg-gradient-to-tr from-indigo-400 via-purple-300 to-pink-400 text-lg'>
                 V
@@ -97,12 +97,12 @@ function Home() {
             </span>
           </div>
 
-          {/* Controls & User Actions */}
+          {/* Controls & Authentication States */}
           <div className='flex items-center gap-4'>
             {userData && (
               <div className='hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium cursor-pointer hover:bg-white/10 transition shadow-inner'>
                 <Coins size={14} className='text-amber-400' />
-                <span className='text-slate-400'>Credits:</span>
+                <span className='text-slate-400'>Credits</span>
                 <span className='text-white font-semibold'>{userData.credits}</span>
                 <span className='font-bold text-indigo-400 hover:text-indigo-300'>+</span>
               </div>
@@ -153,7 +153,10 @@ function Home() {
                       </button>
 
                       <button 
-                        onClick={() => navigate("/dashboard")}
+                        onClick={() => {
+                          setOpenProfile(false)
+                          navigate("/dashboard")
+                        }}
                         className='w-full px-4 py-3 text-left text-xs font-medium text-slate-300 hover:bg-white/5 transition-colors'
                       >
                         Dashboard
@@ -210,7 +213,7 @@ function Home() {
           Turn your ideas into beautiful, interactive, production-ready web interfaces powered by modern AI. No design background required.
         </motion.p>
 
-        {/* Dynamic Hero CTA Button */}
+        {/* Dynamic CTA Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -226,7 +229,7 @@ function Home() {
         </motion.div>
       </section>
 
-      {/* Features Grid Section */}
+      {/* Feature Cards Grid */}
       <section className='relative max-w-7xl mx-auto px-6 pb-32 z-10'>
         <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
           {highlights.map((item, i) => (
