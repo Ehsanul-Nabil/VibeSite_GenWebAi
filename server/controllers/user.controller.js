@@ -11,12 +11,12 @@ export const getCurrentUser=async (req,res)=>{
 
 
 
-// import { generateResponse } from "../config/openRouter.js"
-// export const generatedemo=async (req,res) => {
-//     try {
-//         const result= await generateResponse("hello how are you")
-//         return res.status(200).json(result)
-//     } catch (error) {
-//         return res.status(500).json({message:error})
-//     }
-// }
+import { generateResponse } from "../config/openRouter.js"
+export const generatedemo=async (req,res) => {
+    try {
+        const result= await generateResponse("hello how are you")
+        return res.status(200).json(result)
+    } catch (error) {
+        return res.status(500).json({message:error})
+    }
+}
