@@ -3,10 +3,11 @@ import jwt from "jsonwebtoken";
 
 export const googleAuth=async (req,res)=>{
     console.log("googleAuth Login Func")
+    console.log(req.body)
     try {
         const {name,email,avatar}=req.body
         if(!email){
-            return res.status(400).json({
+            return res.status(404).json({
                 message:"email is required"
             })
         }

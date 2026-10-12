@@ -25,8 +25,8 @@ function Generate() {
         { withCredentials: true }
       )
       console.log(result)
-      // Navigate to your editor page when ready:
-      // navigate(`/editor/${result.data._id}`)
+      // Navigate to editor page when ready:
+      navigate(`/editor/${result.data.websiteId}`)
     } catch (error) {
       console.log(error)
     } finally {

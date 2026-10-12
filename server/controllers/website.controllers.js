@@ -7,7 +7,7 @@ import crypto from "crypto";
 
 
 export const generateWebsite=async (req,res) => {
-    console.log("0")
+    console.log("0 Start") 
     try {
         const {prompt}=req.body
             console.log("1 - Request Payload Checked");
@@ -142,7 +142,7 @@ export const generateWebsite=async (req,res) => {
 
 export const getWebsiteById=async (req,res) => {
     // console.log("indside the getWebsiteById()")
-    console.log(masterPrompt)
+    // console.log(masterPrompt)
     try {
         const website=await Website.findOne({
             _id:req.params.id,

@@ -37,7 +37,7 @@ function Navbar({
           
           {/* Pricing Button with Price Tag Icon */}
           <div 
-            onClick={() => navigate('/pricing')} 
+            // onClick={() => navigate('/pricing')} 
             className='flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#000829] border border-[#1E293B] hover:border-[#00FFFF]/50 text-sm cursor-pointer transition-all shadow-inner group'
           >
             <Tag size={14} className='text-[#00FFFF] group-hover:rotate-12 transition-transform duration-200' />
@@ -83,7 +83,7 @@ function Navbar({
                   <motion.div
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                    exit={{ opacity: 0, y: -100, scale: 0.95, transition: { duration: 0.5 }}}
                     className="absolute right-0 mt-3 w-64 z-50 rounded-2xl bg-[#000829] border border-[#1E293B] shadow-2xl shadow-black/80 overflow-hidden backdrop-blur-2xl"
                   >
                     {/* User Details */}
@@ -119,6 +119,8 @@ function Navbar({
                       <LogOut size={16} />
                       Logout
                     </button>
+
+                    
                   </motion.div>
                 )}
               </AnimatePresence>

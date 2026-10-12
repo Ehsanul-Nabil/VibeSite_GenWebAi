@@ -1,7 +1,7 @@
 import React from 'react'
 import { AnimatePresence, motion } from "framer-motion"
 import { signInWithPopup, GithubAuthProvider, OAuthProvider } from 'firebase/auth'
-import { auth, provider } from '../firebase'
+import { auth, googleProvider,githubProvider } from '../firebase'
 import axios from 'axios'
 import { serverUrl } from '../App'
 import { useDispatch } from 'react-redux'
@@ -12,7 +12,7 @@ function LoginModal({ open, onClose }) {
 
   const handleGoogleAuth = async () => {
     try {
-      const result = await signInWithPopup(auth, provider)
+      const result = await signInWithPopup(auth, googleProvider)
       const { data } = await axios.post(`${serverUrl}/api/auth/google`, {
         name: result.user.displayName,
         email: result.user.email,
@@ -25,21 +25,61 @@ function LoginModal({ open, onClose }) {
     }
   }
 
-  const handleGithubAuth = async () => {
-    try {
-      const githubProvider = new GithubAuthProvider()
-      const result = await signInWithPopup(auth, githubProvider)
-      const { data } = await axios.post(`${serverUrl}/api/auth/github`, {
-        name: result.user.displayName,
-        email: result.user.email,
-        avatar: result.user.photoURL
-      }, { withCredentials: true })
-      dispatch(setUserData(data))
-      onClose()
-    } catch (error) {
-      console.log(error)
+// const handleGithubAuth = async () => {
+//   try {
+//     const result = await signInWithPopup(auth, githubProvider)
+//     const { data } = await axios.post(`${serverUrl}/api/auth/google`, {
+//       name: result.user.displayName || result.user.reloadUserInfo?.screenName || "GitHub User",
+//       email: result.user.email,
+//       avatar: result.user.photoURL || ""
+//     }, { withCredentials: true })
+//     dispatch(setUserData(data))
+//     onClose()
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
+
+
+const handleGithubAuth = async () => {
+  try {
+    const result = await signInWithPopup(auth, githubProvider);
+    let email = result.user.email;
+
+    // Fetch private email from GitHub API if null
+    if (!email) {
+      try {
+        const credential = GithubAuthProvider.credentialFromResult(result);
+        const token = credential?.accessToken;
+
+        if (token) {
+          const { data: emails } = await axios.get("https://api.github.com/user/emails", {
+            headers: { Authorization: `token ${token}` }
+          });
+          const primaryEmail = emails.find(e => e.primary && e.verified) || emails[0];
+          if (primaryEmail) email = primaryEmail.email;
+        }
+      } catch (err) {
+        console.log("Could not fetch GitHub email:", err);
+      }
     }
+
+    // Final fallback to prevent backend 500 error
+    const finalEmail = email || `${result.user.reloadUserInfo?.screenName || 'github_user'}@github.com`;
+
+    const { data } = await axios.post(`${serverUrl}/api/auth/google`, {
+      name: result.user.displayName || result.user.reloadUserInfo?.screenName || "GitHub User",
+      email: finalEmail,
+      avatar: result.user.photoURL || ""
+    }, { withCredentials: true });
+
+    dispatch(setUserData(data));
+    onClose();
+  } catch (error) {
+    console.log(error);
   }
+};
+
 
   const handleMicrosoftAuth = async () => {
     try {
