@@ -74,6 +74,45 @@ export async function login(req, res){
     })
 }
 
+export async function googleAuth(req, res) {
+    const { name, email, avatar } = req.body;
+
+    if (!email) {
+        res.status(400).json({ error: "Email is required" });
+        return;
+    }
+
+    const trimmedEmail = email.toLowerCase().trim();
+
+    // Find existing user or register a new one without password
+    let user = await User.findOne({ email: trimmedEmail });
+
+    if (!user) {
+        user = await User.create({
+            name: name || "Google User",
+            email: trimmedEmail,
+            avatar: avatar || "",
+            // password is left undefined since it is no longer required
+        });
+    } else if (avatar && !user.avatar) {
+        // Optional: Update avatar if missing on existing user
+        user.avatar = avatar;
+        await user.save();
+    }
+
+    setSessionCookie(res, { userId: user._id.toString(), email: user.email });
+
+    res.json({
+        user: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            avatar: user.avatar,
+            credits: user.credits
+        }
+    });
+}
+
 
 export async function logout(_req, res){
     res.cookie("token", "", {

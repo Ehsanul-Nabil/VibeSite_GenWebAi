@@ -70,12 +70,17 @@ function Navbar({
                 className='flex items-center p-0.5 rounded-full border border-[#1E293B] hover:border-[#00FFFF] transition-colors' 
                 onClick={() => setOpenProfile(!openProfile)}
               >
-                <img
+                {/* <img
                   src={userData.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}&background=2D79FF&color=fff`}
                   alt=""
+                  referrerPolicy='no-ref'
                   className='w-9 h-9 rounded-full object-cover'
-                />
+                  
+                /> */}
+                <img src={userData.avatar || `https://ui-avatars.com/api/?name=${userData.name}`} alt="" referrerPolicy='no-ref' className='w-9 h-9 rounded-full border border-white/20 object-cover' />
+
               </button>
+
 
               {/* Profile Dropdown */}
               <AnimatePresence>
