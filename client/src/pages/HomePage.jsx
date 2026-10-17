@@ -14,6 +14,7 @@ const navigate = useNavigate()
 useEffect(()=>{
     loadProjects()
   },[loadProjects])
+  
 
   return (
     <div className="h-screen overflow-y-scroll text-white font-sans bg-[url('/bg-img.png')] bg-cover bg-center bg-no-repeat">

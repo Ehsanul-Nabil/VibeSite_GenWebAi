@@ -96,7 +96,7 @@ function Navbar({
                     <button className='md:hidden w-full px-4 py-3 flex items-center gap-2 text-sm border-b border-[#1E293B] hover:bg-white/5 transition-colors'>
                       <Coins size={15} className='text-yellow-400' />
                       <span className='text-zinc-400'>Credits:</span>
-                      <span className='font-bold text-white'>{userData.credits}</span>
+                      <span className='font-bold text-white'>{userData?.credits}</span>
                       <span className='font-semibold text-[#00FFFF] ml-auto'>+</span>
                     </button>
 

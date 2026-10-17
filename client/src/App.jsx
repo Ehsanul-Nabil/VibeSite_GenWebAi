@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { GuestLayout, AuthLayout } from './pages/Layout';
 import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePage';
+import Home from './pages/Home';
 import BuilderPage from './pages/BuilderPage';
 import PreviewPage from './pages/PreviewPage';
 import { Toaster } from 'react-hot-toast';
@@ -19,6 +20,9 @@ const App = () => {
         <Route path='/login' element={<AuthPage mode="login" />} /> 
         <Route path='/register' element={<AuthPage mode="register" />} />
       </Route>
+
+      <Route path='/homepage' element={<Home />} />
+
 
       {/* Protected Routes */}
       <Route element={<AuthLayout />}>
