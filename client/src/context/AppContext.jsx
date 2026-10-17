@@ -45,8 +45,7 @@ export function AppContextProvider({ children }) {
       const { data } = await api.post("/api/auth/login", {email, password});
       setUser(data.user)
       toast.success("Welcome back!")
-      // navigate("/")
-      navigate("/homepage")
+      navigate("/")
     } catch (err) {
       console.error("Login failed:", err);
       const errMsg = err?.response?.data?.error || "Invalid email or password";
@@ -79,8 +78,8 @@ export function AppContextProvider({ children }) {
     setProjects([])
     setActiveProject(null)
     toast.success("Logged out successfully")
-    // navigate("/login")
-    navigate("/homepage")
+    navigate("/")
+    // navigate("/homepage")
  
   } catch (err) {
     console.error("Logout failed: ", err);
