@@ -15,6 +15,13 @@ const App = () => {
     <Toaster/>
     <Routes>
       {/* Guest Routes */}
+
+      {/* <Route element={<GuestLayout />}> */}
+        {/* passing the string "login" */}
+        {/* <Route path='/login' element={<AuthPage mode="login" />} />  */}
+        {/* <Route path='/register' element={<AuthPage mode="register" />} /> */}
+      {/* </Route> */}
+
       <Route element={<GuestLayout />}>
         {/* passing the string "login" */}
         <Route path='/login' element={<AuthPage mode="login" />} /> 
@@ -27,6 +34,7 @@ const App = () => {
       {/* Protected Routes */}
       <Route element={<AuthLayout />}>
         <Route path='/' element={<HomePage />} />
+        <Route path='/dashboard' element={userData?<Dashboard/>:<Home/>}/>
         <Route path='/builder/:id' element={<BuilderPage />} />
         <Route path='/preview/:id' element={<PreviewPage />} />
       </Route>
