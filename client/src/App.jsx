@@ -1,26 +1,40 @@
 import React from 'react';
-import {BrowserRouter,Routes,Route, Navigate} from "react-router-dom"
-import Home from './pages/Home';
-import useGetCurrentUser from './hook/useGetCurrentUser';
-import { useSelector } from 'react-redux';
-import Dashboard from './pages/Dashboard';
-import Generate from './pages/Generate';
-import Editor from './pages/Editor';
-export const serverUrl = "http://localhost:8000"
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { GuestLayout, AuthLayout } from './pages/Layout';
+import AuthPage from './pages/AuthPage';
+import HomePage from './pages/HomePage';
+import BuilderPage from './pages/BuilderPage';
+import PreviewPage from './pages/PreviewPage';
+import { Toaster } from 'react-hot-toast';
+import PublishPage from './pages/PublishPage';
 
 const App = () => {
-
-  useGetCurrentUser()
-  const {userData}=useSelector(state=>state.user)
   return (
-    <BrowserRouter>
+    <>
+    <Toaster/>
     <Routes>
-      <Route path='/' element={<Home/>} />
-      <Route path='/dashboard' element={userData?<Dashboard/>:<Home/>}/>
-      <Route path='/generate' element={userData?<Generate/>:<Home/>}/>
-      <Route path='/editor/:id' element={userData?<Editor/>:<Home/>}/>
+      {/* Guest Routes */}
+      <Route element={<GuestLayout />}>
+        {/* passing the string "login" */}
+        <Route path='/login' element={<AuthPage mode="login" />} /> 
+        <Route path='/register' element={<AuthPage mode="register" />} />
+      </Route>
+
+      {/* Protected Routes */}
+      <Route element={<AuthLayout />}>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/builder/:id' element={<BuilderPage />} />
+        <Route path='/preview/:id' element={<PreviewPage />} />
+      </Route>
+
+      {/* Public Routes */}
+      <Route path='/publish/:id' element={<PublishPage/>} />
+     
+     {/* Catch-all */}
+      <Route path='*' element={<Navigate to="/" replace />} />
+
     </Routes>
-    </BrowserRouter>
+    </>
   );
 };
 

@@ -1,16 +1,12 @@
 import mongoose from "mongoose";
-import dns from "node:dns"; // Changed require to import
+import dns from "node:dns";
 
-// Force Node.js to use public DNS servers to bypass Windows network SRV blocks
+// Force Node.js to use public DNS servers (Google & Cloudflare)
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
-const connectToDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URL);
-    console.log("Connected to Database");
-  } catch (err) {
-    console.log("Database connection error:", err);
-  }
-};
-
-export default connectToDB; 
+export async function connectToDatabase(){
+    mongoose.connection.on('connected', ()=>{
+        console.log("Successfully connected to MongoDB.")
+    })
+    await mongoose.connect(process.env.MONGODB_URI)
+}
