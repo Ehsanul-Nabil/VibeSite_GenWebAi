@@ -37,7 +37,7 @@ function Navbar({
           
           {/* Pricing Button with Price Tag Icon */}
           <div 
-            // onClick={() => navigate('/pricing')} 
+            onClick={() => navigate('/pricing')} 
             className='flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#000829] border border-[#1E293B] hover:border-[#00FFFF]/50 text-sm cursor-pointer transition-all shadow-inner group'
           >
             <Tag size={14} className='text-[#00FFFF] group-hover:rotate-12 transition-transform duration-200' />
