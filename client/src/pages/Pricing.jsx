@@ -54,31 +54,58 @@ const plans = [
 ];
 
 
-const serverUrl="kjkdjkfj"
+const serverUrl="http://localhost:3000"
 function Pricing() {
     const navigate = useNavigate()
     const { user } = useAppContext()
     const [loading, setLoading] = useState(null)
 
-    const handleBuy = async (planKey) => {
-        if (!user) {
-            navigate("/")
-            return
-        }
-        if (planKey === "free") {
-            navigate("/dashboard")
-            return
-        }
+    // const handleBuy = async (planKey) => {
+    //     if (!user) {
+    //         navigate("/")
+    //         return
+    //     }
+    //     if (planKey === "free") {
+    //         navigate("/dashboard")
+    //         return
+    //     }
 
-        setLoading(planKey)
-        try {
-            const result = await axios.post(`${serverUrl}/api/billing`, { planType: planKey }, { withCredentials: true })
-            window.location.href = result.data.sessionUrl
-        } catch (error) {
-            console.log(error)
-            setLoading(null)
-        }
+    //     setLoading(planKey)
+    //     try {
+    //         const result = await axios.post(`${serverUrl}/api/payment`, { planType: planKey }, { withCredentials: true })
+    //         window.location.href = result.data.sessionUrl
+    //     } catch (error) {
+    //         console.log(error)
+    //         setLoading(null)
+    //     }
+    // }
+    const handleBuy = async (planKey) => {
+    if (!user) {
+        navigate("/")
+        return
     }
+    if (planKey === "free") {
+        navigate("/dashboard")
+        return
+    }
+
+    setLoading(planKey)
+    try {
+        // Updated route path to /api/payment/initiate
+        const result = await axios.post(
+            `${serverUrl}/api/payment/initiate`, 
+            { planType: planKey }, 
+            { withCredentials: true }
+        )
+        
+        if (result.data?.sessionUrl) {
+            window.location.href = result.data.sessionUrl
+        }
+    } catch (error) {
+        console.error("Payment initiation error:", error)
+        setLoading(null)
+    }
+}
 
     return (
         <div className='relative min-h-screen overflow-hidden bg-[#050505] text-white px-6 pt-16 pb-24'>
