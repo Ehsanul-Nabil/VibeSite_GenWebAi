@@ -21,6 +21,7 @@ export async function createProject(req, res){
     }
 
     // Create project in DB immediately with "pending" status
+    // A. Creates the MongoDB document (files: {}, status: "pending", currentFile: null)
     const project = await Project.create({
         name: "Planning project...",
         description: prompt,
@@ -39,10 +40,22 @@ export async function createProject(req, res){
     })
 
     // Start background generation
+    // B. Starts the background AI process without using 'await'
     runBackgroundGeneration(project._id.toString(), prompt).catch((err)=>{
         console.error(`[Background AI] Fatal generation error for project ${project._id}:`, err)
     })
 
+
+//     // Tells Vercel to keep the process running in the background after sending res
+//   waitUntil(
+//     runBackgroundGeneration(project._id.toString(), prompt).catch((err) => {
+//       console.error(`[Background AI] Error:`, err);
+//     })
+//   );
+
+
+
+// C. Immediately sends the response to the user's browser (HTTP 201)
     res.status(201).json({
         _id: project._id,
         name: project.name,
@@ -104,6 +117,13 @@ async function runBackgroundGeneration(projectId, prompt){
                     }
                 })
             },
+
+            onFileStart: async (path) => {
+                console.log(`[Background AI] Starting file ${path} for project ${projectId}`);
+                await Project.findByIdAndUpdate(projectId, {
+                    currentFile: path,
+                })
+                },
             
             onFileComplete: async (path, code)=>{
                 console.log(`[Background AI] Finished file ${path} for project ${projectId}`);

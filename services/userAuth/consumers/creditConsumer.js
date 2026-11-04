@@ -48,6 +48,18 @@ export async function startCreditConsumer() {
         return;
       }
 
+      // // Multiply by -1 to perform decrement
+      // const user = await User.findOneAndUpdate(
+      //   {
+      //     _id: userId,
+      //     credits: { $gte: amount }, // Prevent negative credit balance
+      //   },
+      //   {
+      //     $inc: { credits: -amount }, // Correct variable usage
+      //   },
+      //   { new: true }
+      // );
+
       // Multiply by -1 to perform decrement
       const user = await User.findOneAndUpdate(
         {
@@ -55,9 +67,9 @@ export async function startCreditConsumer() {
           credits: { $gte: amount }, // Prevent negative credit balance
         },
         {
-          $inc: { credits: -amount }, // ✅ Correct variable usage
+          $inc: { credits: -amount }, // Correct variable usage
         },
-        { new: true }
+        { returnDocument: 'after' }
       );
 
       if (!user) {

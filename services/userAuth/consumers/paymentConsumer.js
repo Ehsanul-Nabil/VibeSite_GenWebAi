@@ -43,7 +43,8 @@ export async function startPaymentConsumer() {
         {
           $inc: { credits: credits },$set: { plan: plan },
         },
-        { new: true, runValidators: true }
+        // { new: true, runValidators: true }
+        { returnDocument: 'after', runValidators: true }
       );
 
       if (!user) {

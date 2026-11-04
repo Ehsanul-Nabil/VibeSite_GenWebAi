@@ -105,6 +105,14 @@ async function runBackgroundGeneration(projectId, prompt){
                     }
                 })
             },
+
+            onFileStart: async (path) => {
+                console.log(`[Background AI] Starting file ${path} for project ${projectId}`);
+                await Project.findByIdAndUpdate(projectId, {
+                    currentFile: path,
+                })
+                },
+                
             onFileComplete: async (path, code)=>{
                 console.log(`[Background AI] Finished file ${path} for project ${projectId}`);
 

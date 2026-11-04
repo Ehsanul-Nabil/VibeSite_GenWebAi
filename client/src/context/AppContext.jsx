@@ -188,6 +188,7 @@ export function AppContextProvider({ children }) {
     },[activeProject, user]
   )
 
+
   const handleGenerate = useCallback(
     async (prompt) => {
       if(!user) return;
@@ -207,6 +208,7 @@ export function AppContextProvider({ children }) {
     },[navigate, user]
   )
 
+  
   const handleDelete = useCallback(
     async (id) => {
       if(!user) return;
