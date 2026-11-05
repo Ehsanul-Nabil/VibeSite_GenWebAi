@@ -28,39 +28,28 @@ const setSessionCookie = (res, payload)=>{
 //   }
 // })
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // Force SSL/TLS on port 465
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  // Set explicit timeouts to prevent Render from hanging indefinitely
-  connectionTimeout: 10000, // 10 seconds to connect
-  greetingTimeout: 5000,    // 5 seconds for SMTP greeting
-  socketTimeout: 10000,     // 10 seconds for socket activity
-});
 
-export const sendOtpEmail = async (toEmail, otp) => {
-  const mailOptions = {
-    from: `"VibeSite Studio" <${process.env.EMAIL_USER}>`,
-    to: toEmail,
-    subject: 'Your VibeSite Verification Code',
-    html: `
-      <div style="font-family: Arial, sans-serif; background-color: #0b0b0b; color: #ffffff; padding: 30px; borderRadius: 16px;">
-        <h2 style="color: #a855f7;">VibeSite.AI Verification</h2>
-        <p style="color: #cbd5e1; font-size: 14px;">Use the following 6-digit code to complete your sign-in process:</p>
-        <div style="background-color: #111622; border: 1px solid #1e293b; display: inline-block; padding: 12px 24px; border-radius: 12px; margin: 16px 0;">
-          <span style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #38bdf8;">${otp}</span>
-        </div>
-        <p style="color: #64748b; font-size: 12px;">This code expires in 5 minutes. If you did not request this code, please ignore this email.</p>
-      </div>
-    `
-  }
 
-  await transporter.sendMail(mailOptions)
-}
+// export const sendOtpEmail = async (toEmail, otp) => {
+//   const mailOptions = {
+//     from: `"VibeSite Studio" <${process.env.EMAIL_USER}>`,
+//     to: toEmail,
+//     subject: 'Your VibeSite Verification Code',
+//     html: `
+//       <div style="font-family: Arial, sans-serif; background-color: #0b0b0b; color: #ffffff; padding: 30px; borderRadius: 16px;">
+//         <h2 style="color: #a855f7;">VibeSite.AI Verification</h2>
+//         <p style="color: #cbd5e1; font-size: 14px;">Use the following 6-digit code to complete your sign-in process:</p>
+//         <div style="background-color: #111622; border: 1px solid #1e293b; display: inline-block; padding: 12px 24px; border-radius: 12px; margin: 16px 0;">
+//           <span style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #38bdf8;">${otp}</span>
+//         </div>
+//         <p style="color: #64748b; font-size: 12px;">This code expires in 5 minutes. If you did not request this code, please ignore this email.</p>
+//       </div>
+//     `
+//   }
+
+//   await transporter.sendMail(mailOptions)
+// }
+
 
 
 
@@ -126,6 +115,37 @@ export const sendOtpEmail = async (toEmail, otp) => {
 
 
 
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    type: 'OAuth2',
+    user: process.env.EMAIL_USER,
+    clientId: process.env.OAUTH_CLIENT_ID,
+    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    refreshToken: process.env.OAUTH_REFRESH_TOKEN
+  }
+})
+
+export const sendOtpEmail = async (toEmail, otp) => {
+  const mailOptions = {
+    from: `"VibeSite Studio" <${process.env.EMAIL_USER}>`,
+    to: toEmail,
+    subject: 'Your VibeSite Verification Code',
+    html: `
+      <div style="font-family: Arial, sans-serif; background-color: #0b0b0b; color: #ffffff; padding: 30px; border-radius: 16px;">
+        <h2 style="color: #a855f7;">VibeSite.AI Verification</h2>
+        <p style="color: #cbd5e1; font-size: 14px;">Use the following 6-digit code to complete your sign-in process:</p>
+        <div style="background-color: #111622; border: 1px solid #1e293b; display: inline-block; padding: 12px 24px; border-radius: 12px; margin: 16px 0;">
+          <span style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #38bdf8;">${otp}</span>
+        </div>
+        <p style="color: #64748b; font-size: 12px;">This code expires in 5 minutes. If you did not request this code, please ignore this email.</p>
+      </div>
+    `
+  }
+
+  await transporter.sendMail(mailOptions)
+}
 
 export async function register(req, res) {
     try {
@@ -244,6 +264,8 @@ export async function sendLoginOtp(req, res) {
     return res.status(500).json({ error: "Failed to send OTP" })
   }
 }
+
+
 
 
 export async function verifyLoginOtp(req, res) {
