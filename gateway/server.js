@@ -29,9 +29,7 @@ app.get("/", (_req, res) => {
 
 
 // User / Authentication Service
-app.use(
-  "/api/auth",
-  (req, _res, next) => {
+app.use("/api/auth",(req, _res, next) => {
     console.log(`[Gateway] Proxying ${req.method} request from ${req.originalUrl} -> ${process.env.USER_SERVICE_URL}`);
     next();
   },

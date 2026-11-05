@@ -1,5 +1,7 @@
 import { User } from "../models/User.js";
 import jwt from 'jsonwebtoken';
+import {redisClient as redis} from '../config/redis.js' // or redisClient according to your export
+import nodemailer from 'nodemailer'
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret"
 
@@ -14,6 +16,37 @@ const setSessionCookie = (res, payload)=>{
         path: "/",
     })
 }
+
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail', // Or use host/port for custom SMTP (Resend, SendGrid, Mailtrap)
+  auth: {
+    user: process.env.EMAIL_USER, // Your sender email
+    pass: process.env.EMAIL_PASS  // App password generated from Google/SMTP provider
+  }
+})
+
+export const sendOtpEmail = async (toEmail, otp) => {
+  const mailOptions = {
+    from: `"VibeSite Studio" <${process.env.EMAIL_USER}>`,
+    to: toEmail,
+    subject: 'Your VibeSite Verification Code',
+    html: `
+      <div style="font-family: Arial, sans-serif; background-color: #0b0b0b; color: #ffffff; padding: 30px; borderRadius: 16px;">
+        <h2 style="color: #a855f7;">VibeSite.AI Verification</h2>
+        <p style="color: #cbd5e1; font-size: 14px;">Use the following 6-digit code to complete your sign-in process:</p>
+        <div style="background-color: #111622; border: 1px solid #1e293b; display: inline-block; padding: 12px 24px; border-radius: 12px; margin: 16px 0;">
+          <span style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #38bdf8;">${otp}</span>
+        </div>
+        <p style="color: #64748b; font-size: 12px;">This code expires in 5 minutes. If you did not request this code, please ignore this email.</p>
+      </div>
+    `
+  }
+
+  await transporter.sendMail(mailOptions)
+}
+
+
 
 export async function register(req, res){
     const {name, email, password} = req.body
@@ -47,33 +80,150 @@ export async function register(req, res){
     })
 }
 
-export async function login(req, res){
-    const {email, password} = req.body
-    console.log("hellllllloooooooooooooooo")
+// export async function login(req, res){
+//     const {email, password} = req.body
+//     console.log("hellllllloooooooooooooooo")
 
-    if(!email || !password){
-        res.status(400).json({error: "Email and password are required"})
-        return;
-    }
+//     if(!email || !password){
+//         res.status(400).json({error: "Email and password are required"})
+//         return;
+//     }
 
-    const trimmedEmail = email.toLowerCase().trim();
-    const user = await User.findOne({email: trimmedEmail})
+//     const trimmedEmail = email.toLowerCase().trim();
+//     const user = await User.findOne({email: trimmedEmail})
     
-    if(!user || !(await user.comparePassword(password))){
-        res.status(401).json({error: "Invalid email or password"})
-        return;
+//     if(!user || !(await user.comparePassword(password))){
+//         res.status(401).json({error: "Invalid email or password"})
+//         return;
+//     }
+
+//     setSessionCookie(res, {userId: user._id.toString(), email: user.email})
+
+//     res.json({
+//         user: {
+//             _id: user._id,
+//             name: user.name,
+//             email: user.email
+//         }
+//     })
+// }
+
+export async function sendLoginOtp(req, res) {
+  try {
+    const { email, password } = req.body
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" })
     }
 
-    setSessionCookie(res, {userId: user._id.toString(), email: user.email})
+    const trimmedEmail = email.toLowerCase().trim()
+    const user = await User.findOne({ email: trimmedEmail })
 
-    res.json({
-        user: {
-            _id: user._id,
-            name: user.name,
-            email: user.email
-        }
+    if (!user || !(await user.comparePassword(password))) {
+      return res.status(401).json({ error: "Invalid email or password" })
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString()
+
+    // Store OTP in Redis for 300 seconds (5 mins)
+    await redis.set(`otp:${trimmedEmail}`, otp, "EX", 300)
+
+    // Send email to user
+    await sendOtpEmail(trimmedEmail, otp)
+
+    return res.json({ 
+      success: true, 
+      message: "OTP sent to your email address" 
     })
+  } catch (error) {
+    console.error("sendLoginOtp Error:", error)
+    return res.status(500).json({ error: "Failed to send OTP" })
+  }
 }
+
+
+export async function verifyLoginOtp(req, res) {
+    try {
+        const { email, otp } = req.body
+
+        if (!email || !otp) {
+            return res.status(400).json({ error: "Email and OTP are required" })
+        }
+
+        const trimmedEmail = email.toLowerCase().trim()
+
+        // Fetch cached OTP from Redis
+        const cachedOtp = await redis.get(`otp:${trimmedEmail}`)
+
+        if (!cachedOtp) {
+            return res.status(400).json({ error: "OTP not found or has expired" })
+        }
+
+        if (cachedOtp !== otp.toString().trim()) {
+            return res.status(400).json({ error: "Incorrect OTP code" })
+        }
+
+        // OTP is valid -> delete from Redis immediately so it cannot be reused
+        await redis.del(`otp:${trimmedEmail}`)
+
+        const user = await User.findOne({ email: trimmedEmail })
+        if (!user) {
+            return res.status(404).json({ error: "User not found" })
+        }
+
+        // Set session cookie / JWT
+        setSessionCookie(res, { userId: user._id.toString(), email: user.email })
+
+        return res.json({
+            success: true,
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        })
+    } catch (error) {
+        console.error("verifyLoginOtp Error:", error)
+        return res.status(500).json({ error: "OTP verification failed" })
+    }
+}
+
+export async function resendOtp(req, res) {
+    try {
+        const { email } = req.body
+
+        if (!email) {
+            return res.status(400).json({ error: "Email is required to resend OTP" })
+        }
+
+        const trimmedEmail = email.toLowerCase().trim()
+        const user = await User.findOne({ email: trimmedEmail })
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" })
+        }
+
+        // Generate a new 6-digit OTP
+        const newOtp = Math.floor(100000 + Math.random() * 900000).toString()
+
+        // Overwrite existing key in Redis and reset expiration to 300 seconds
+        await redis.set(`otp:${trimmedEmail}`, newOtp, "EX", 300)
+
+        // TODO: Send new OTP via Nodemailer / SendGrid / Console log
+        console.log(`[RESENT NEW OTP TO ${trimmedEmail}]: ${newOtp}`)
+
+        return res.json({ 
+            success: true, 
+            message: "A new OTP code has been sent to your email" 
+        })
+    } catch (error) {
+        console.error("resendOtp Error:", error)
+        return res.status(500).json({ error: "Failed to resend OTP" })
+    }
+}
+
+
 
 export async function googleAuth(req, res) {
     const { name, email, avatar } = req.body;

@@ -6,6 +6,7 @@ import { connectToDatabase } from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
 import { startPaymentConsumer } from './consumers/paymentConsumer.js';
 import { startCreditConsumer } from './consumers/creditConsumer.js';
+import  { connectRedis }  from './config/redis.js';
 
 const app = express();
 
@@ -47,7 +48,9 @@ const port = process.env.PORT || 4001;
 
 async function startServer() {
   try {
+
     await connectToDatabase();
+    await connectRedis();
 
     app.listen(port, () => {
       console.log(`User Service running on port ${port}`);
