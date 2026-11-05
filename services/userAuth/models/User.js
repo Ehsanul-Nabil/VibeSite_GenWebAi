@@ -26,6 +26,10 @@ const UserSchema = new Schema({
         default:500,
         min:0
     },
+    active: {
+        type: Boolean,
+        default: false
+    },
     plan:{
         type:String,
         enum:["free","pro","enterprise"],
