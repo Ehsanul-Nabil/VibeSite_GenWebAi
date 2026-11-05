@@ -20,13 +20,27 @@ const setSessionCookie = (res, payload)=>{
 }
 
 
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail', // Or use host/port for custom SMTP (Resend, SendGrid, Mailtrap)
+//   auth: {
+//     user: process.env.EMAIL_USER, // Your sender email
+//     pass: process.env.EMAIL_PASS  // App password generated from Google/SMTP provider
+//   }
+// })
+
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // Or use host/port for custom SMTP (Resend, SendGrid, Mailtrap)
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // Force SSL/TLS on port 465
   auth: {
-    user: process.env.EMAIL_USER, // Your sender email
-    pass: process.env.EMAIL_PASS  // App password generated from Google/SMTP provider
-  }
-})
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+  // Set explicit timeouts to prevent Render from hanging indefinitely
+  connectionTimeout: 10000, // 10 seconds to connect
+  greetingTimeout: 5000,    // 5 seconds for SMTP greeting
+  socketTimeout: 10000,     // 10 seconds for socket activity
+});
 
 export const sendOtpEmail = async (toEmail, otp) => {
   const mailOptions = {
@@ -155,6 +169,8 @@ export async function register(req, res) {
         return res.status(500).json({ error: "Registration failed" })
     }
 }
+
+
 
 export async function verifyEmail(req, res) {
     try {
