@@ -99,6 +99,34 @@ export const Project = mongoose.model("Project", ProjectSchema);
 
 
 
+// files: {
+//     "/styles.css": {
+//       content: "@import url('https://fonts.googleapis.com/...');\n\nbody {\n  margin: 0;\n}",
+//       hash: "79e3c8a91608"
+//     },
+//     "/App.js": {
+//       content: "import React, { useState } from 'react';\nimport Header from './components/Header';\nimport ProductGrid from './components/ProductGrid';",
+//       hash: "d54b582e9b49"
+//     },
+//     "/index.js": {
+//       content: "import React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport App from './App';",
+//       hash: "a1b2c3d4e5f6"
+//     },
+//     "/public/index.html": {
+//       content: "<!DOCTYPE html>\n<html lang=\"en\">\n  <head><title>App</title></head>\n  <body><div id=\"root\"></div></body>\n</html>",
+//       hash: "8f7e6d5c4b3a"
+//     },
+//     "/package.json": {
+//       content: "{\n  \"name\": \"my-app\",\n  \"version\": \"1.0.0\",\n  \"dependencies\": {\n    \"react\": \"^18.2.0\"\n  }\n}",
+//       hash: "123456789abc"
+//     },
+//     "/components/Header.js": {
+//       content: "export default function Header() { return <header>Header</header>; }",
+//       hash: "987654321cba"
+//     }
+//   }
+
+
 
 // import mongoose from "mongoose";
 
