@@ -10,10 +10,12 @@ const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret"
 // Helper to set cookie
 const setSessionCookie = (res, payload)=>{
     const token = jwt.sign(payload, JWT_SECRET, {expiresIn: "30d"})
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie('token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: isProduction ? "none" : "lax", // "none" for production cross-domain, "lax" for local dev        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax", // "none" for production cross-domain, "lax" for local dev
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
         path: "/",
     })
 }
