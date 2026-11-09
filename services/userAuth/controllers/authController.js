@@ -13,8 +13,7 @@ const setSessionCookie = (res, payload)=>{
     res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        sameSite: isProduction ? "none" : "lax", // "none" for production cross-domain, "lax" for local dev        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
         path: "/",
     })
 }
