@@ -394,10 +394,11 @@ export async function googleAuth(req, res) {
 
 
 export async function logout(_req, res){
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("token", "", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax", // "none" for production cross-domain, "lax" for local dev
         maxAge: 0,
         path: "/",
     })
