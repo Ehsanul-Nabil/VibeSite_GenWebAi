@@ -4,6 +4,7 @@ import {redisClient as redis} from '../config/redis.js' // or redisClient accord
 import nodemailer from 'nodemailer'
 import crypto from 'crypto'
 import { sendVerificationEmail } from '../utils/sendEmail.js'
+import { sendOtpEmail } from "../utils/sendOTP.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret"
 
@@ -128,25 +129,25 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-export const sendOtpEmail = async (toEmail, otp) => {
-  const mailOptions = {
-    from: `"VibeSite Studio" <${process.env.EMAIL_USER}>`,
-    to: toEmail,
-    subject: 'Your VibeSite Verification Code',
-    html: `
-      <div style="font-family: Arial, sans-serif; background-color: #0b0b0b; color: #ffffff; padding: 30px; border-radius: 16px;">
-        <h2 style="color: #a855f7;">VibeSite.AI Verification</h2>
-        <p style="color: #cbd5e1; font-size: 14px;">Use the following 6-digit code to complete your sign-in process:</p>
-        <div style="background-color: #111622; border: 1px solid #1e293b; display: inline-block; padding: 12px 24px; border-radius: 12px; margin: 16px 0;">
-          <span style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #38bdf8;">${otp}</span>
-        </div>
-        <p style="color: #64748b; font-size: 12px;">This code expires in 5 minutes. If you did not request this code, please ignore this email.</p>
-      </div>
-    `
-  }
+// export const sendOtpEmail = async (toEmail, otp) => {
+//   const mailOptions = {
+//     from: `"VibeSite Studio" <${process.env.EMAIL_USER}>`,
+//     to: toEmail,
+//     subject: 'Your VibeSite Verification Code',
+//     html: `
+//       <div style="font-family: Arial, sans-serif; background-color: #0b0b0b; color: #ffffff; padding: 30px; border-radius: 16px;">
+//         <h2 style="color: #a855f7;">VibeSite.AI Verification</h2>
+//         <p style="color: #cbd5e1; font-size: 14px;">Use the following 6-digit code to complete your sign-in process:</p>
+//         <div style="background-color: #111622; border: 1px solid #1e293b; display: inline-block; padding: 12px 24px; border-radius: 12px; margin: 16px 0;">
+//           <span style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #38bdf8;">${otp}</span>
+//         </div>
+//         <p style="color: #64748b; font-size: 12px;">This code expires in 5 minutes. If you did not request this code, please ignore this email.</p>
+//       </div>
+//     `
+//   }
 
-  await transporter.sendMail(mailOptions)
-}
+//   await transporter.sendMail(mailOptions)
+// }
 
 export async function register(req, res) {
     try {
@@ -231,6 +232,7 @@ export async function verifyEmail(req, res) {
         return res.status(500).json({ error: "Email verification failed" })
     }
 }
+
 
 export async function sendLoginOtp(req, res) {
   try {
