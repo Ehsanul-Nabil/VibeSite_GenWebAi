@@ -169,7 +169,7 @@ const BuilderHeader = ({
           className={`${buttonClass} ${
             showCode
               ? "!bg-cyan-500/10 !text-cyan-400 !border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.15)]"
-              : ""
+              : `${buttonClass} border-purple-500/40 bg-gradient-to-r  text-white  shadow-[0_0_15px_rgba(147,51,234,0.3)] hover:shadow-[0_0_20px_rgba(147,51,234,0.5)]`
           }`}
         >
           {showCode ? (
@@ -186,7 +186,7 @@ const BuilderHeader = ({
         </button>
 
         {/* Open Preview */}
-        <button onClick={onOpenPreview} className={buttonClass}>
+        <button onClick={onOpenPreview} className={`${buttonClass} border-purple-500/40 bg-gradient-to-r  text-white  shadow-[0_0_15px_rgba(147,51,234,0.3)] hover:shadow-[0_0_20px_rgba(147,51,234,0.5)]`}>
           <ExternalLinkIcon size={13} className="text-slate-400" />
           <span>Open Preview</span>
         </button>
@@ -195,7 +195,7 @@ const BuilderHeader = ({
         <button
           onClick={onPublish}
           disabled={publishing}
-          className={`${buttonClass} border-purple-500/40 bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-500 hover:to-indigo-500 shadow-[0_0_15px_rgba(147,51,234,0.3)] hover:shadow-[0_0_20px_rgba(147,51,234,0.5)]`}
+          className={`${buttonClass} border-purple-500/40 bg-gradient-to-r  text-white  shadow-[0_0_15px_rgba(147,51,234,0.3)] hover:shadow-[0_0_20px_rgba(147,51,234,0.5)]`}
         >
           {publishing ? (
             <Loader2Icon size={13} className="animate-spin text-white" />
@@ -206,7 +206,7 @@ const BuilderHeader = ({
         </button>
 
         {/* Export */}
-        <button onClick={onDownload} className={buttonClass}>
+        <button onClick={onDownload} className={`${buttonClass} border-purple-500/40 bg-gradient-to-r  text-white  shadow-[0_0_15px_rgba(147,51,234,0.3)] hover:shadow-[0_0_20px_rgba(147,51,234,0.5)]`}>
           <DownloadIcon size={13} className="text-slate-400" />
           <span>Export</span>
         </button>
@@ -216,7 +216,7 @@ const BuilderHeader = ({
         {/* Sign Out */}
         <button
           onClick={onLogout}
-          className={`${buttonClass} border-transparent bg-transparent text-slate-400 hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/20`}
+          className={`${buttonClass} border-purple-500/40 bg-gradient-to-r  text-white  shadow-[0_0_15px_rgba(147,51,234,0.3)] hover:shadow-[0_0_20px_rgba(147,51,234,0.5)]`}
         >
           <LogOutIcon size={13} />
           <span>Sign out</span>

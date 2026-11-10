@@ -1,142 +1,150 @@
 import React from 'react'
 import { motion } from 'motion/react'
-import { Sparkles, Code, BrainCircuit } from 'lucide-react'
+import { Sparkles, Code, MessageSquare, Share2, Mail, ArrowUpRight, Heart } from 'lucide-react'
 
-// Professional, sophisticated palette
+// Matching theme configuration
 const theme = {
-  bg: 'bg-[#000516]', // Deep Cobalt / Void
-  accent: 'text-[#6D28D9]', // Indigo / Violet
-  primaryGradient: 'bg-gradient-to-r from-[#00FFFF] via-[#2D79FF] to-[#6D28D9] bg-clip-text text-transparent', // Cyan-Blue-Indigo
-  badgeBg: 'bg-gradient-to-r from-[#6D28D9]/20 to-[#00FFFF]/10',
-  badgeBorder: 'border-[#6D28D9]/40',
-  glow: 'bg-[#0B0133]/60',
+  bg: 'bg-[#000516]',
+  border: 'border-[#1E293B]',
+  cardBg: 'bg-[#000829]',
+  primaryGradient: 'bg-gradient-to-r from-[#00FFFF] via-[#2D79FF] to-[#6D28D9] bg-clip-text text-transparent',
+  accent: 'text-[#00FFFF]',
   btnPrimary: 'bg-gradient-to-r from-[#2D79FF] to-[#6D28D9] text-white',
-  codePanel: {
-    bg: 'bg-[#000829]',
-    border: 'border-[#1E293B]',
-    text: 'text-[#94A3B8]', // Zinc / slate
-    highlight: 'text-[#00FFFF]', // Cyan
-  }
 }
 
-function HeroSection({ userData, navigate }) {
-  // Define professional quotes as discussed
-  const professionalQuote = {
-    visionToCode: "Bridging the gap between creative vision and executable code. Transform ideas into scalable, production-ready frontend architectures instantly.",
-    speedToMarket: "Eliminate boilerplate. Accelerate product deployment cycles from weeks to minutes with intelligent AI layout generation.",
-    creatorFocus: "The smartest layer between prompt and production. Turn raw concepts into fully structured, component-driven web interfaces effortlessly."
-  };
+function Footer({ navigate }) {
+  const footerLinks = {
+    Product: [
+      { name: 'AI Generator', path: '/dashboard' },
+      { name: 'Templates', path: '/templates' },
+      { name: 'Pricing', path: '/pricing' },
+      { name: 'Changelog', path: '/changelog' },
+    ],
+    Resources: [
+      { name: 'Documentation', path: '/docs' },
+      { name: 'Component Library', path: '/components' },
+      { name: 'API Reference', path: '/api' },
+      { name: 'Guides & Tutorials', path: '/guides' },
+    ],
+    Company: [
+      { name: 'About Us', path: '/about' },
+      { name: 'Careers', path: '/careers' },
+      { name: 'Privacy Policy', path: '/privacy' },
+      { name: 'Terms of Service', path: '/terms' },
+    ],
+  }
 
-  // Example structured code block for the visualization panel
-  const codeSnippet = `
-export default function Component(data) {
-  /* Elevate creative vision with precision code */
+  const socialLinks = [
+    { icon: Code, href: 'https://github.com', label: 'GitHub' },
+    { icon: MessageSquare, href: 'https://twitter.com', label: 'Twitter' },
+    { icon: Share2, href: 'https://linkedin.com', label: 'LinkedIn' },
+    { icon: Mail, href: 'mailto:support@vibesite.ai', label: 'Email' },
+  ]
+
   return (
-    <Architecture className="w-full h-full">
-      <Structure.Component data={data.elements}>
-        {data.logic}
-      </Structure.Component>
-    </Architecture>
-  );
-}`;
+    <footer className={`relative pt-24 pb-12 px-6 border-t ${theme.border} ${theme.bg} overflow-hidden text-left`}>
+      {/* Background Ambient Glow */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#6D28D9]/10 blur-[140px] rounded-full pointer-events-none" />
 
-  return (
-    <section className={`pt-44 pb-32 px-6 text-center relative overflow-hidden ${theme.bg}`}>
-      {/* Redesigned Background Glow & Quantum Matrix Elements */}
-      <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] ${theme.glow} blur-[120px] rounded-full pointer-events-none`} />
-      
-      {/* Stylized background matrix lines */}
-      <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
-        <svg width="100%" height="100%">
-          <defs>
-            <linearGradient id="gradient-line" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#2D79FF" stopOpacity="1" />
-              <stop offset="100%" stopColor="#6D28D9" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          {[...Array(15)].map((_, i) => (
-            <line key={i} x1={5 + i * 7 + '%'} y1="0" x2={95 - i * 3 + '%'} y2="100%" stroke="url(#gradient-line)" strokeWidth="0.5"/>
-          ))}
-        </svg>
-      </div>
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Top Call to Action Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className={`p-8 md:p-12 rounded-3xl ${theme.cardBg} border ${theme.border} mb-20 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden`}
+        >
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#2D79FF]/10 blur-[80px] rounded-full pointer-events-none" />
+          
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#6D28D9]/20 border border-[#6D28D9]/40 text-xs font-semibold text-[#A78BFA] mb-4">
+              <Sparkles size={14} />
+              <span>Ready to build?</span>
+            </div>
+            <h3 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+              Transform your workflow with <span className={theme.primaryGradient}>VibeSite.AI</span>
+            </h3>
+            <p className="text-zinc-400 mt-2 text-sm md:text-base">
+              Generate production-grade React components in seconds. No credit card required.
+            </p>
+          </div>
 
-      {/* Redesigned Pill Badge */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className={`relative z-10 inline-flex items-center gap-2.5 px-5 py-2 rounded-full ${theme.badgeBg} border ${theme.badgeBorder} backdrop-blur-lg text-xs font-semibold text-[#A78BFA] mb-10 shadow-[0_0_10px_2px_rgba(109,40,217,0.2)]`}
-      >
-        <Sparkles size={15} className="text-[#A78BFA]" />
-        <span>Next Generation Web Creation</span>
-      </motion.div>
+        
+        </motion.div>
 
-      {/* Redesigned Headline */}
-      <motion.h1
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative z-10 text-5xl md:text-7xl font-extrabold tracking-tight max-w-5xl mx-auto leading-[1.1]"
-      >
-        Turn Simple Prompts Into <br />
-        <span className={`${theme.primaryGradient}`}>
-          Production-Ready Code
-        </span>
-      </motion.h1>
-
-      {/* NEW: Professional Subtitle / Quote Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="relative z-10 mt-10 mb-16 max-w-4xl mx-auto px-6 border-l-2 border-[#1E293B]/60"
-      >
-        <p className="text-zinc-400 text-lg md:text-xl font-light leading-relaxed italic text-left">
-          "{professionalQuote.visionToCode}"
-        </p>
-      </motion.div>
-
-      {/* REDESIGNED: Action Section & Code Visualization */}
-      <div className="relative z-10 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-        {/* Left column: input visualization */}
-        <div className="flex flex-col gap-6 items-start">
-          <div className="w-full p-6 rounded-2xl bg-[#000829] border border-[#1E293B] flex items-center gap-4 text-left">
-            <BrainCircuit size={28} className="text-[#2D79FF]" />
+        {/* Main Footer Content Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 pb-16 border-b border-[#1E293B]">
+          {/* Brand Column */}
+          <div className="md:col-span-2 flex flex-col justify-between">
             <div>
-              <p className="text-sm font-semibold text-white">Prompt your vision</p>
-              <p className="text-xs text-zinc-500">"Build a clean, high-converting product landing page for a web SaaS with smooth scrolling."</p>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-[#00FFFF] to-[#6D28D9] flex items-center justify-center">
+                  <Sparkles size={18} className="text-white" />
+                </div>
+                <span className="text-xl font-bold text-white tracking-tight">
+                  VibeSite<span className={theme.accent}>.AI</span>
+                </span>
+              </div>
+              <p className="text-zinc-400 text-sm leading-relaxed max-w-sm mb-6">
+                The AI-powered layout & frontend code engine. Turn creative concepts and raw prompts into clean, scalable React & Tailwind interfaces effortlessly.
+              </p>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-3">
+              {socialLinks.map((social, index) => {
+                const Icon = social.icon
+                return (
+                  <a
+                    key={index}
+                    href={social.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={social.label}
+                    className="w-10 h-10 rounded-xl bg-[#000829] border border-[#1E293B] flex items-center justify-center text-zinc-400 hover:text-[#00FFFF] hover:border-[#00FFFF]/50 transition-all duration-200"
+                  >
+                    <Icon size={18} />
+                  </a>
+                )
+              })}
             </div>
           </div>
-          
-          {/* Main Action Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="w-full flex justify-center md:justify-start"
-          >
-            <button
-              className={`px-12 py-5 mt-6 rounded-2xl ${theme.btnPrimary} font-bold text-lg shadow-2xl shadow-[#6D28D9]/20 hover:shadow-[#6D28D9]/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-in-out`}
-              onClick={() => navigate("/dashboard")}
-            >
-              {userData ? "Go to Dashboard" : "Start Building Free"}
-            </button>
-          </motion.div>
+
+          {/* Links Columns */}
+          {Object.entries(footerLinks).map(([category, links], i) => (
+            <div key={i}>
+              <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+                {category}
+              </h4>
+              <ul className="space-y-3">
+                {links.map((link, linkIdx) => (
+                  <li key={linkIdx}>
+                    <button
+                      onClick={() => navigate ? navigate(link.path) : null}
+                      className="text-sm text-zinc-400 hover:text-[#00FFFF] transition-colors duration-200 text-left"
+                    >
+                      {link.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        {/* Right column: code visualization panel */}
-        <div className={`p-6 rounded-3xl ${theme.codePanel.bg} border ${theme.codePanel.border} text-left font-mono text-sm leading-relaxed ${theme.codePanel.text} shadow-[0_0_30px_10px_rgba(0,13,51,0.5)]`}>
-          <div className="flex items-center gap-2 mb-4">
-            <Code size={18} className="text-[#2D79FF]" />
-            <span className="text-xs uppercase font-bold text-[#1E293B]">Component Output</span>
+        {/* Bottom Bar */}
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+          <p>© {new Date().getFullYear()} VibeSite.AI Inc. All rights reserved.</p>
+          
+          <div className="flex items-center gap-1 text-zinc-500">
+            <span>Crafted with</span>
+            <Heart size={12} className="text-[#00FFFF] fill-[#00FFFF]" />
+            <span>for modern creators</span>
           </div>
-          <p className={`${theme.codePanel.highlight} opacity-90`}>{`// QuantumMatrix.tsx`}</p>
-          <pre className="text-xs md:text-sm whitespace-pre-wrap">
-            <code>{codeSnippet}</code>
-          </pre>
         </div>
       </div>
-
-    </section>
+    </footer>
   )
 }
 
-export default HeroSection
+export default Footer

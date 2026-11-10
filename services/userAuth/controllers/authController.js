@@ -21,134 +21,6 @@ const setSessionCookie = (res, payload)=>{
     })
 }
 
-
-// const transporter = nodemailer.createTransport({
-//   service: 'gmail', // Or use host/port for custom SMTP (Resend, SendGrid, Mailtrap)
-//   auth: {
-//     user: process.env.EMAIL_USER, // Your sender email
-//     pass: process.env.EMAIL_PASS  // App password generated from Google/SMTP provider
-//   }
-// })
-
-
-
-// export const sendOtpEmail = async (toEmail, otp) => {
-//   const mailOptions = {
-//     from: `"VibeSite Studio" <${process.env.EMAIL_USER}>`,
-//     to: toEmail,
-//     subject: 'Your VibeSite Verification Code',
-//     html: `
-//       <div style="font-family: Arial, sans-serif; background-color: #0b0b0b; color: #ffffff; padding: 30px; borderRadius: 16px;">
-//         <h2 style="color: #a855f7;">VibeSite.AI Verification</h2>
-//         <p style="color: #cbd5e1; font-size: 14px;">Use the following 6-digit code to complete your sign-in process:</p>
-//         <div style="background-color: #111622; border: 1px solid #1e293b; display: inline-block; padding: 12px 24px; border-radius: 12px; margin: 16px 0;">
-//           <span style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #38bdf8;">${otp}</span>
-//         </div>
-//         <p style="color: #64748b; font-size: 12px;">This code expires in 5 minutes. If you did not request this code, please ignore this email.</p>
-//       </div>
-//     `
-//   }
-
-//   await transporter.sendMail(mailOptions)
-// }
-
-
-
-
-// export async function register(req, res){
-//     const {name, email, password} = req.body
-
-//     if(!name || !email || !password){
-//         res.status(400).json({error: "Name, email, and password are required"})
-//         return;
-//     }
-
-//     const trimmedEmail = email.toLowerCase().trim();
-//     const existing = await User.findOne({email: trimmedEmail})
-//     if(existing){
-//         res.status(400).json({error: "An account with this email already exists"})
-//         return;
-//     }
-
-//     const user = await User.create({
-//         name,
-//         email: trimmedEmail,
-//         password
-//     })
-
-//     setSessionCookie(res, {userId: user._id.toString(), email: user.email})
-
-//     res.status(201).json({
-//         user: {
-//             _id: user._id,
-//             name: user.name,
-//             email: user.email
-//         }
-//     })
-// }
-
-// export async function login(req, res){
-//     const {email, password} = req.body
-//     console.log("hellllllloooooooooooooooo")
-
-//     if(!email || !password){
-//         res.status(400).json({error: "Email and password are required"})
-//         return;
-//     }
-
-//     const trimmedEmail = email.toLowerCase().trim();
-//     const user = await User.findOne({email: trimmedEmail})
-    
-//     if(!user || !(await user.comparePassword(password))){
-//         res.status(401).json({error: "Invalid email or password"})
-//         return;
-//     }
-
-//     setSessionCookie(res, {userId: user._id.toString(), email: user.email})
-
-//     res.json({
-//         user: {
-//             _id: user._id,
-//             name: user.name,
-//             email: user.email
-//         }
-//     })
-// }
-
-
-
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    type: 'OAuth2',
-    user: process.env.EMAIL_USER,
-    clientId: process.env.OAUTH_CLIENT_ID,
-    clientSecret: process.env.OAUTH_CLIENT_SECRET,
-    refreshToken: process.env.OAUTH_REFRESH_TOKEN
-  }
-})
-
-// export const sendOtpEmail = async (toEmail, otp) => {
-//   const mailOptions = {
-//     from: `"VibeSite Studio" <${process.env.EMAIL_USER}>`,
-//     to: toEmail,
-//     subject: 'Your VibeSite Verification Code',
-//     html: `
-//       <div style="font-family: Arial, sans-serif; background-color: #0b0b0b; color: #ffffff; padding: 30px; border-radius: 16px;">
-//         <h2 style="color: #a855f7;">VibeSite.AI Verification</h2>
-//         <p style="color: #cbd5e1; font-size: 14px;">Use the following 6-digit code to complete your sign-in process:</p>
-//         <div style="background-color: #111622; border: 1px solid #1e293b; display: inline-block; padding: 12px 24px; border-radius: 12px; margin: 16px 0;">
-//           <span style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #38bdf8;">${otp}</span>
-//         </div>
-//         <p style="color: #64748b; font-size: 12px;">This code expires in 5 minutes. If you did not request this code, please ignore this email.</p>
-//       </div>
-//     `
-//   }
-
-//   await transporter.sendMail(mailOptions)
-// }
-
 export async function register(req, res) {
     try {
         console.log("inside the register ")
@@ -202,14 +74,14 @@ export async function verifyEmail(req, res) {
             return res.status(400).json({ error: "Invalid or missing token" })
         }
 
-        // 1. Look up token in Redis
+        // 1Lo -> ok up token in Redis
         const email = await redis.get(`verify:${token}`)
 
         if (!email) {
             return res.status(400).json({ error: "Verification token is invalid or has expired" })
         }
 
-        // 2. Set active: true in MongoDB
+        // 2 -> Set active: true in MongoDB
         const user = await User.findOneAndUpdate(
             { email },
             { active: true },
@@ -419,34 +291,3 @@ export async function me(req, res){
     res.json({user})
 }
 
-
-
-// import { subscribeToQueue } from "../config/rabbitmq.js";
-
-// export async function startPaymentConsumer() {
-//   await subscribeToQueue("payment.completed", async (message) => {
-//     const event = JSON.parse(message);
-
-//     const { userId, plan, credits } = event;
-
-//     if (
-//       !userId ||!["pro", "enterprise"].includes(plan) ||!Number.isInteger(credits) ||credits <= 0) {
-//       throw new Error("Invalid payment event");
-//     }
-
-//     const user = await User.findByIdAndUpdate(
-//       userId,
-//       {
-//         $inc: { credits },
-//         $set: { plan },
-//       },
-//       { new: true, runValidators: true }
-//     );
-
-//     if (!user) {
-//       throw new Error(`User not found: ${userId}`);
-//     }
-
-//     console.log(`Updated credits and plan for user ${userId}`);
-//   });
-// }

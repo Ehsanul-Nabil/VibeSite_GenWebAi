@@ -19,7 +19,7 @@ const theme = {
   }
 }
 
-function HeroSection({ userData, navigate }) {
+function HeroSection({ userData, navigate, setOpenLogin}) {
   // Define professional quotes as discussed
   const professionalQuote = {
     visionToCode: "Bridging the gap between creative vision and executable code. Transform ideas into scalable, production-ready frontend architectures instantly.",
@@ -113,12 +113,27 @@ export default function Component(data) {
             transition={{ delay: 0.2 }}
             className="w-full flex justify-center md:justify-start"
           >
-            <button
+            {/* <button
               className={`px-12 py-5 mt-6 rounded-2xl ${theme.btnPrimary} font-bold text-lg shadow-2xl shadow-[#6D28D9]/20 hover:shadow-[#6D28D9]/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-in-out`}
               onClick={() => navigate("/dashboard")}
             >
               {userData ? "Go to Dashboard" : "Start Building Free"}
-            </button>
+            </button> */}
+
+            <button
+                className={`px-12 py-5 mt-6 rounded-2xl ${theme.btnPrimary} font-bold text-lg shadow-2xl shadow-[#6D28D9]/20 hover:shadow-[#6D28D9]/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-in-out`}
+                onClick={() => {
+                  if (userData) {
+                    navigate('/dashboard')
+                  } else {
+                    setOpenLogin(true)
+                  }
+                }}
+              >
+                {userData ? "Go to Dashboard" : "Start Building Free"}
+          </button>
+
+
           </motion.div>
         </div>
 

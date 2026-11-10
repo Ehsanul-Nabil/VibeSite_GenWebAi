@@ -44,6 +44,7 @@ function Home() {
      <HeroSection
         userData={user}
         navigate={navigate}
+        setOpenLogin={setOpenLogin}
       />
 
       <HighlightsSection

@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Coins, LayoutDashboard, LogOut, Sparkles, Tag } from 'lucide-react'
+import { useAppContext } from '../../context/AppContext'
 
 function Navbar({ 
   userData, 
@@ -10,6 +11,7 @@ function Navbar({
   handleLogOut, 
   navigate 
 }) {
+  const {user}=useAppContext()
   return (
     <motion.div
       initial={{ y: -40, opacity: 0 }}
@@ -28,23 +30,25 @@ function Navbar({
             <Sparkles size={16} className='text-[#00FFFF]' />
           </div>
           <span className='text-lg font-extrabold tracking-tight bg-gradient-to-r from-[#00FFFF] via-[#2D79FF] to-[#6D28D9] bg-clip-text text-transparent'>
-            VibeSite.AI
+            VibeSite Studio
           </span>
         </div>
 
         {/* Action Items */}
         <div className='flex items-center gap-4 md:gap-5'>
           
-          {/* Pricing Button with Price Tag Icon */}
-          <div 
-            onClick={() => navigate('/pricing')} 
-            className='flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#000829] border border-[#1E293B] hover:border-[#00FFFF]/50 text-sm cursor-pointer transition-all shadow-inner group'
-          >
-            <Tag size={14} className='text-[#00FFFF] group-hover:rotate-12 transition-transform duration-200' />
-            <span className='text-zinc-300 text-xs font-semibold group-hover:text-white transition-colors'>
-              Pricing
-            </span>
-          </div>
+         {user && (
+              /* Pricing Button with Price Tag Icon */
+              <div 
+                onClick={() => navigate('/pricing')} 
+                className='flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#000829] border border-[#1E293B] hover:border-[#00FFFF]/50 text-sm cursor-pointer transition-all shadow-inner group'
+              >
+                <Tag size={14} className='text-[#00FFFF] group-hover:rotate-12 transition-transform duration-200' />
+                <span className='text-zinc-300 text-xs font-semibold group-hover:text-white transition-colors'>
+                  Pricing
+                </span>
+              </div>
+            )}
 
           {/* Credits Badge */}
           {userData && (
