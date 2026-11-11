@@ -11,7 +11,6 @@ function Navbar({
   handleLogOut, 
   navigate 
 }) {
-  const {user}=useAppContext()
   return (
     <motion.div
       initial={{ y: -40, opacity: 0 }}
@@ -37,7 +36,7 @@ function Navbar({
         {/* Action Items */}
         <div className='flex items-center gap-4 md:gap-5'>
           
-         {user && (
+         {userData && (
               /* Pricing Button with Price Tag Icon */
               <div 
                 onClick={() => navigate('/pricing')} 
@@ -55,7 +54,7 @@ function Navbar({
             <div className='hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#000829] border border-[#1E293B] hover:border-[#2D79FF]/50 text-sm cursor-pointer transition-all shadow-inner'>
               <Coins size={15} className='text-yellow-400 animate-pulse' />
               <span className='text-zinc-400 text-xs font-medium'>Credits</span>
-              <span className='font-bold text-white'>{userData.credits}</span>
+              <span className='font-bold text-white'>{userData?.credits}</span>
               <span className='font-semibold text-[#00FFFF] ml-0.5'>+</span>
             </div>
           )}
@@ -97,8 +96,8 @@ function Navbar({
                   >
                     {/* User Details */}
                     <div className='px-4 py-3.5 border-b border-[#1E293B] bg-white/[0.02]'>
-                      <p className='text-sm font-semibold text-white truncate'>{userData.name}</p>
-                      <p className='text-xs text-zinc-400 truncate mt-0.5'>{userData.email}</p>
+                      <p className='text-sm font-semibold text-white truncate'>{userData?.name}</p>
+                      <p className='text-xs text-zinc-400 truncate mt-0.5'>{userData?.email}</p>
                     </div>
 
                     {/* Mobile Credits View */}
