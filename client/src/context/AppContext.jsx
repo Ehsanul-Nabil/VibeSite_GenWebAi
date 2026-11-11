@@ -38,7 +38,7 @@ export function AppContextProvider({ children }) {
 
     useEffect(() => {
     checkSession();
-    }, [user]);
+    }, []);
 
     const login = async (email, password) => {
     try {
@@ -135,7 +135,7 @@ export function AppContextProvider({ children }) {
           return files[0]
         })
       }
-    } catch (err) {+
+    } catch (err) {
       console.error("Failed to load project:", err);
       if(!silent){
         toast.error("Failed to load project details");

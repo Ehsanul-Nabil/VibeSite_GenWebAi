@@ -15,7 +15,7 @@ const GeneratePromptBox = ({ onGenerate, generatingProject }) => {
           <PromptInput
             onSubmit={onGenerate}
             loading={generatingProject}
-            placeholder="Describe your dream website..."
+            placeholder="Describe your Idea..."
             variant="glass"
             large
             autoFocus

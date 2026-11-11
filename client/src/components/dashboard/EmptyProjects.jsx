@@ -13,7 +13,7 @@ const EmptyProjects = () => {
       <p className="text-slate-300 text-sm font-medium mb-1">No projects generated yet</p>
       <p className="text-slate-500 text-xs mb-5">Start building your first web application with VibeSite.AI</p>
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/generate")}
         className="px-4 py-2 text-xs font-semibold rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800 hover:border-slate-700 transition cursor-pointer active:scale-95 flex items-center gap-2"
       >
         <Plus size={14} /> Create Your First Website
